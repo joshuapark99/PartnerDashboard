@@ -1,12 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React from 'react';
 import { Container, Box, Typography, CircularProgress } from '@mui/material';
 import InfoBox from './InfoBox';
 import TestList from './TestList';
 import WorkHours from './WorkHours';
 import Appointments from './Appointments';
-import { UserContext } from '../utils/userContext';
-import { getPartnerById } from '../services/partnerService';
-
 const LandingPage = () => {
 
   return (
