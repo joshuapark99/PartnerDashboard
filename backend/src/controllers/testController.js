@@ -33,19 +33,14 @@ const updateTests = async (req, res) => {
         );
 
         const dbTests = result.rows;
-        console.log(tests)
-        console.log(dbTests)
         // Compare the ids of the stored tests and the new tests
         const dbTestIds = dbTests.map((test) => test.id);
         const newTestIds = tests.map((test) => test.id);
 
-        console.log(dbTestIds)
-        console.log(newTestIds)
         // Update the tests that are already in the database
         for (const newTest of tests) {
 
             if (dbTestIds.includes(newTest.id)) {
-                console.log("updating")
                 const dbTest = dbTests.find((test) => test.id === newTest.id);
 
                 if (
@@ -64,7 +59,6 @@ const updateTests = async (req, res) => {
         for (const newTest of tests) {
 
             if (!newTest.id) {
-                console.log("inserting a test")
                 await client.query(
                     `INSERT INTO tests (partner_id, name, price) VALUES ($1, $2, $3)`,
                     [newTest.partner_id, newTest.name, newTest.price]
@@ -84,7 +78,6 @@ const updateTests = async (req, res) => {
         }
 
         await client.query("COMMIT"); // commit transaction'
-        console.log("fully updated successflly")
         res.status(200).json({ message: "Tests updated successfully" });
     } catch (error) {
         await client.query("ROLLBACK"); // rollback transaction
@@ -92,12 +85,8 @@ const updateTests = async (req, res) => {
         //     message: "An error occurred while updating tests",
         //     error: error.message,
         // });]\
-        console.log(error)
-        console.log("it failed for some reason")
-        console.log(await pool.query(`SELECT * FROM tests WHERE partner_id = $1`))
         res.status(500).json(error);
     } finally {
-        console.log('released')
         client.release(); // release client
     }
 };
